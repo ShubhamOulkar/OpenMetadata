@@ -148,6 +148,7 @@ import org.openmetadata.service.security.AuthLoginServlet;
 import org.openmetadata.service.security.AuthLogoutServlet;
 import org.openmetadata.service.security.AuthRefreshServlet;
 import org.openmetadata.service.security.AuthServeletHandlerFactory;
+import org.openmetadata.service.resources.slack.SlackAppResource;
 import org.openmetadata.service.security.AuthServeletHandlerRegistry;
 import org.openmetadata.service.security.AuthenticationCodeFlowHandler;
 import org.openmetadata.service.security.Authorizer;
@@ -1043,6 +1044,7 @@ public class OpenMetadataApplication extends Application<OpenMetadataApplication
 
     environment.jersey().register(new AuditLogResource(authorizer, auditLogRepository));
     environment.jersey().register(new DiagnosticsResource(authorizer));
+    environment.jersey().register(new SlackAppResource());
     environment.jersey().register(new JsonPatchProvider());
     environment.jersey().register(new JsonPatchMessageBodyReader());
 
