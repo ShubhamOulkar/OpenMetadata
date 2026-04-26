@@ -1,5 +1,7 @@
 # Slack App Demo Integration
 
+https://github.com/user-attachments/assets/4d6c3f76-3fcc-47b3-b365-ae3022908cef
+
 ## Project Vision & Current Status
 This demo is part of a larger initiative to build a Slack app that brings metadata awareness directly into where teams already communicate. 
 
