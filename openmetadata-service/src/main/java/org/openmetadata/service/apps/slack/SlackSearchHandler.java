@@ -40,9 +40,11 @@ public class SlackSearchHandler {
     List<LayoutBlock> blocks = new ArrayList<>();
 
     try {
+      // Wrap the query in wildcards for substring matching, similar to UI search behavior
+      String wildcardQuery = "*" + query + "*";
       SearchRequest request =
           new SearchRequest()
-              .withQuery(query)
+              .withQuery(wildcardQuery)
               .withSize(MAX_RESULTS)
               .withIndex("all")
               .withFetchSource(true);
