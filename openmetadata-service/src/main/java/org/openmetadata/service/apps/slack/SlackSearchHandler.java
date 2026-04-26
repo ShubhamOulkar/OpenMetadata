@@ -71,16 +71,15 @@ public class SlackSearchHandler {
             SlackBlockBuilder.truncate(
                 source.path("description").asText("No description available."), MAX_DESC_LENGTH);
 
+        String url = String.format("%s/%s/%s", OM_BASE_URL, entityType, fqn);
         String sectionText =
-            String.format("*[%s]* <%s/%s/%s|%s>\n%s",
+            String.format("*[%s]* *%s*\n%s",
                 entityType.toUpperCase(),
-                OM_BASE_URL,
-                entityType,
-                fqn,
                 name,
                 description);
 
-        blocks.add(SlackBlockBuilder.section(sectionText));
+        blocks.add(SlackBlockBuilder.sectionWithLinkButton(
+            sectionText, "View", url, "view_entity_" + i));
       }
 
     } catch (Exception e) {
