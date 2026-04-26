@@ -54,23 +54,27 @@ public class SlackAppResource {
     if (text != null && text.toLowerCase().startsWith("search")) {
       String query = text.substring("search".length()).trim();
       if (query.isEmpty()) {
-        return Response.ok(new SlackTextResponse("Please provide a search term. Usage: `/metadata search <term>`")).build();
+        String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(
+            new SlackTextResponse("Please provide a search term. Usage: `/metadata search <term>`"));
+        return Response.ok(json).build();
       }
       List<LayoutBlock> blocks = searchHandler.search(query);
-      return Response.ok(new SlackBlockResponse(blocks)).build();
+      String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(new SlackBlockResponse(blocks));
+      return Response.ok(json).build();
     }
 
     // Default help message
-    return Response.ok(
+    String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(
         new SlackTextResponse(
             String.format(
                 "Hello <@%s>! Here's what I can do:\n• `/metadata search <term>` — Search for data assets",
-                userId)))
-        .build();
+                userId)));
+    return Response.ok(json).build();
   }
 
   /** Simple text-only Slack response. */
   public static class SlackTextResponse {
+    @Getter @Setter private String responseType = "ephemeral";
     @Getter @Setter private String text;
 
     public SlackTextResponse() {}
@@ -82,6 +86,8 @@ public class SlackAppResource {
 
   /** Block Kit response for rich Slack messages. */
   public static class SlackBlockResponse {
+    @Getter @Setter private String responseType = "ephemeral";
+    @Getter @Setter private String text = "Search results";
     @Getter @Setter private List<LayoutBlock> blocks;
 
     public SlackBlockResponse() {}
