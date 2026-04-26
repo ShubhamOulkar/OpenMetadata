@@ -46,12 +46,12 @@ public class SlackSearchHandler {
           new SearchRequest()
               .withQuery(wildcardQuery)
               .withSize(MAX_RESULTS)
-              .withIndex("all")
+              .withIndex(searchRepository.getIndexOrAliasName("all"))
               .withFetchSource(true);
 
       SubjectContext subjectContext = SubjectContext.getSubjectContext("admin");
       Response response = searchRepository.search(request, subjectContext);
-      JsonNode root = JsonUtils.valueToTree(response.getEntity());
+      JsonNode root = JsonUtils.readTree((String) response.getEntity());
       JsonNode hits = root.path("hits").path("hits");
 
       if (hits.isMissingNode() || hits.isEmpty()) {
