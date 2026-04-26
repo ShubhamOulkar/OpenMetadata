@@ -40,13 +40,27 @@ public class SlackSearchHandler {
     List<LayoutBlock> blocks = new ArrayList<>();
 
     try {
-      // Restrict search strictly to table names and display names using wildcard matching
-      String fieldQuery = String.format("name:*%s* OR displayName:*%s*", query, query);
+      String indexName = "all";
+      String searchTerm = query;
+
+      String[] parts = query.split("\\s+", 2);
+      if (parts.length == 2) {
+        String possibleType = parts[0].toLowerCase();
+        Set<String> validTypes = Set.of(
+            "table", "topic", "dashboard", "pipeline", "mlmodel", "container", "glossary", "user", "team");
+        if (validTypes.contains(possibleType)) {
+          indexName = possibleType;
+          searchTerm = parts[1];
+        }
+      }
+
+      // Restrict search strictly to name and displayName using wildcard matching
+      String fieldQuery = String.format("name:*%s* OR displayName:*%s*", searchTerm, searchTerm);
       SearchRequest request =
           new SearchRequest()
               .withQuery(fieldQuery)
               .withSize(MAX_RESULTS)
-              .withIndex(searchRepository.getIndexOrAliasName("table"))
+              .withIndex(searchRepository.getIndexOrAliasName(indexName))
               .withFetchSource(true);
 
       SubjectContext subjectContext = SubjectContext.getSubjectContext("admin");

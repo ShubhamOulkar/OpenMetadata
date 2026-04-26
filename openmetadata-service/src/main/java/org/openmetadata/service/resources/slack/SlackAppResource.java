@@ -67,7 +67,7 @@ public class SlackAppResource {
     String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(
         new SlackTextResponse(
             String.format(
-                "Hello <@%s>! Here's what I can do:\n• `/metadata search <term>` — Search for data assets",
+                "Hello <@%s>! Here's what I can do:\n• `/metadata search <term>` — Search all assets by name\n• `/metadata search table <term>` — Search only tables\n• Supported types: `table`, `topic`, `dashboard`, `pipeline`, `mlmodel`, `glossary`",
                 userId)));
     return Response.ok(json).build();
   }
