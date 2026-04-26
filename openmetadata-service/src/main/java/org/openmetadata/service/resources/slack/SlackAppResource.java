@@ -72,6 +72,21 @@ public class SlackAppResource {
     return Response.ok(json).build();
   }
 
+  @POST
+  @Path("/interactive")
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Operation(
+      operationId = "slackInteractive",
+      summary = "Handle Slack interactivity",
+      description = "Silently acknowledges Slack interactive component actions (like button clicks).")
+  public Response handleInteractive(@FormParam("payload") String payload) {
+    // Slack sends a 'payload' JSON string when a user clicks a button.
+    // Since our 'View' buttons use a URL to open the browser, we don't need to process the payload.
+    // We just need to return an empty 200 OK so Slack knows we received it and doesn't show an error.
+    LOG.info("Slack interactive payload received");
+    return Response.ok().build();
+  }
+
   /** Simple text-only Slack response. */
   public static class SlackTextResponse {
     @Getter @Setter private String responseType = "ephemeral";

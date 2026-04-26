@@ -105,7 +105,8 @@ public class JwtFilter implements ContainerRequestFilter {
           "v1/users/login",
           "v1/users/refresh",
           "v1/collate/apps/support/login",
-          "v1/slack/command");
+          "v1/slack/command",
+          "v1/slack/interactive");
 
   @SuppressWarnings("unused")
   private JwtFilter() {}
