@@ -1,7 +1,17 @@
-# Slack App Demo
+# Slack App Demo Integration
+
+## Project Vision & Current Status
+This demo is part of a larger initiative to build a Slack app that brings metadata awareness directly into where teams already communicate. 
+
+**Goals & Progress:**
+* ✅ **Search:** `/metadata search customer_orders` — find assets directly from Slack
+* ✅ **Alerts:** Forward OpenMetadata observability alerts to Slack channels with rich formatting (via existing OM Webhooks)
+* ⏳ **Quick actions:** Approve glossary terms, acknowledge data quality incidents, assign ownership — all from Slack
+* ⏳ **Daily digest:** Post a daily summary of metadata changes, quality status, and pending governance tasks to a channel
+* ⏳ **Ask questions:** "Hey @metadata-bot, who owns the payments table?" using the MCP server under the hood
 
 ## Changes Included in Current Demo Setup
-This demo introduces a native Slack integration allowing users to search and discover OpenMetadata assets directly from Slack using slash commands.
+This demo introduces the native slash command search capability:
 * **Slash Command Endpoint (`/api/v1/slack/command`)**: Parses `/metadata search <type> <query>` and queries the OpenMetadata Elasticsearch/OpenSearch backend.
 * **Interactive UI Blocks**: Returns results using Slack's rich Block Kit UI, complete with interactive "View" buttons that link directly to the assets in the OpenMetadata UI.
 * **Interactivity Endpoint (`/api/v1/slack/interactive`)**: Silently acknowledges button clicks to prevent Slack from displaying interactive timeout errors.
@@ -11,6 +21,7 @@ This demo introduces a native Slack integration allowing users to search and dis
 1. **Create a Slack App**: Go to [api.slack.com/apps](https://api.slack.com/apps) and create a new app.
 2. **Enable Slash Commands**: Create a new command called `/metadata` and point the Request URL to your OpenMetadata backend: `https://<your-om-domain>/api/v1/slack/command`.
 3. **Enable Interactivity**: Go to "Interactivity & Shortcuts", toggle it on, and set the Request URL to: `https://<your-om-domain>/api/v1/slack/interactive`.
-4. **Install App**: Install the app into your Slack workspace.
+4. **Configure Observability Alerts**: To receive OpenMetadata alerts, create an Incoming Webhook in your Slack app and configure it in the OpenMetadata UI by following the [Slack Alerts Configuration Guide](https://docs.open-metadata.org/v1.11.x/how-to-guides/data-quality-observability/alerts-notifications/slack-alerts-configuration).
+5. **Install App**: Install the app into your Slack workspace.
 
 > **Note:** User authorization and Slack request signature verification (HMAC) are not implemented for this setup. The endpoints are currently open to demonstrate the functionality.
