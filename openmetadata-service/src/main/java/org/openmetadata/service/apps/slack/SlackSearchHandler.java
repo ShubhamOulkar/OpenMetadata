@@ -86,6 +86,18 @@ public class SlackSearchHandler {
       blocks.add(SlackBlockBuilder.header("Search Results for: " + query));
       blocks.add(SlackBlockBuilder.divider());
 
+      String baseUrl = "";
+      try {
+        Settings settings = Entity.getSystemRepository().getOMBaseUrlConfigInternal();
+        if (settings != null && settings.getConfigValue() != null) {
+          OpenMetadataBaseUrlConfiguration baseUrlConfig =
+              (OpenMetadataBaseUrlConfiguration) settings.getConfigValue();
+          baseUrl = baseUrlConfig.getOpenMetadataUrl();
+        }
+      } catch (Exception e) {
+        LOG.warn("Failed to get OpenMetadata Base URL for Slack result links", e);
+      }
+
       for (int i = 0; i < hits.size(); i++) {
         JsonNode source = hits.get(i).path("_source");
         String name = source.path("name").asText("Unknown");
@@ -94,18 +106,6 @@ public class SlackSearchHandler {
         String description =
             SlackBlockBuilder.truncate(
                 source.path("description").asText("No description available."), MAX_DESC_LENGTH);
-
-        String baseUrl = "";
-        try {
-          Settings settings = Entity.getSystemRepository().getOMBaseUrlConfigInternal();
-          if (settings != null && settings.getConfigValue() != null) {
-            OpenMetadataBaseUrlConfiguration baseUrlConfig =
-                (OpenMetadataBaseUrlConfiguration) settings.getConfigValue();
-            baseUrl = baseUrlConfig.getOpenMetadataUrl();
-          }
-        } catch (Exception e) {
-          LOG.warn("Failed to get OpenMetadata Base URL for Slack result links", e);
-        }
 
         String url = String.format("%s/%s/%s", baseUrl, entityType, fqn);
         String sectionText =
