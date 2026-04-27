@@ -203,3 +203,4 @@ ingestion/.claude/agents
 .claude/plans/
 
 test-results/
+openmetadata-1.12.0-SNAPSHOT
