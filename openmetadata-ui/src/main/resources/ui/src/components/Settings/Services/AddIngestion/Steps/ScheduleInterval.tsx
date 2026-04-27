@@ -106,6 +106,7 @@ const ScheduleInterval = <T,>({
   const { cron: cronString, selectedPeriod, dow, dom } = state;
 
   const {
+    isMinuteSelected,
     showMinuteSelect,
     showHourSelect,
     showWeekSelect,
@@ -115,18 +116,24 @@ const ScheduleInterval = <T,>({
     weekCol,
     monthCol,
   } = useMemo(() => {
+    const isMinuteSelected = selectedPeriod === 'minute';
     const isHourSelected = selectedPeriod === 'hour';
     const isDaySelected = selectedPeriod === 'day';
     const isWeekSelected = selectedPeriod === 'week';
     const isMonthSelected = selectedPeriod === 'month';
     const showMinuteSelect =
-      isHourSelected || isDaySelected || isWeekSelected || isMonthSelected;
+      isMinuteSelected ||
+      isHourSelected ||
+      isDaySelected ||
+      isWeekSelected ||
+      isMonthSelected;
     const showHourSelect = isDaySelected || isWeekSelected || isMonthSelected;
     const showWeekSelect = isWeekSelected;
     const showMonthSelect = isMonthSelected;
     const minuteCol = isHourSelected ? 12 : 6;
 
     return {
+      isMinuteSelected,
       showMinuteSelect,
       showHourSelect,
       showWeekSelect,
@@ -293,6 +300,7 @@ const ScheduleInterval = <T,>({
                   {getHourMinuteSelect({
                     cronType: CronTypes.MINUTE,
                     disabled,
+                    isFrequency: isMinuteSelected,
                   })}
                 </Form.Item>
               </Col>

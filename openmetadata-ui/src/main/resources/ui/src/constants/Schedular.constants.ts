@@ -30,6 +30,10 @@ export const SCHEDULAR_OPTIONS = [
 
 export const PERIOD_OPTIONS = [
   {
+    label: 'label.minute',
+    value: 'minute',
+  },
+  {
     label: 'label.hour',
     value: 'hour',
   },
@@ -90,6 +94,7 @@ export const DAY_IN_MONTH_OPTIONS = [...Array(31).keys()].map((v) => {
 });
 
 export const CRON_COMBINATIONS: Combination = {
+  minute: /^(\*\s){4}\*$/, // "* * * * *"
   hour: /^\d{1,2}\s(\*\s){3}\*$/, // "? * * * *"
   day: /^(\d{1,2}\s){2}(\*\s){2}\*$/, // "? ? * * *"
   week: /^(\d{1,2}\s){2}(\*\s){2}\d{1,2}$/, // "? ? * * ?"

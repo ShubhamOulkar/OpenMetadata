@@ -41,6 +41,23 @@ public final class SlackBlockBuilder {
     return DividerBlock.builder().build();
   }
 
+  public static com.slack.api.model.block.ActionsBlock actionButton(
+      String label, String url, String actionId) {
+    return com.slack.api.model.block.ActionsBlock.builder()
+        .elements(
+            java.util.List.of(
+                com.slack.api.model.block.element.ButtonElement.builder()
+                    .text(
+                        com.slack.api.model.block.composition.PlainTextObject.builder()
+                            .text(label)
+                            .emoji(true)
+                            .build())
+                    .url(url)
+                    .actionId(actionId)
+                    .build()))
+        .build();
+  }
+
   /** Truncates a string to maxLen characters, appending "..." if needed. */
   public static String truncate(String s, int maxLen) {
     if (s == null) return "";
