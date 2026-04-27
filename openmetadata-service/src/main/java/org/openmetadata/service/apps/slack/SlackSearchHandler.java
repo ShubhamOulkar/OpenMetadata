@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.openmetadata.schema.search.SearchRequest;
+import org.openmetadata.schema.api.configuration.OpenMetadataBaseUrlConfiguration;
+import org.openmetadata.schema.settings.Settings;
 import org.openmetadata.schema.utils.JsonUtils;
 import org.openmetadata.service.Entity;
 import org.openmetadata.service.search.SearchRepository;
@@ -20,8 +21,6 @@ import jakarta.ws.rs.core.Response;
 @Slf4j
 public class SlackSearchHandler {
 
-  private static final String OM_BASE_URL =
-      "https://jubilant-funicular-rvv69g9ggjq35jp4-8585.app.github.dev";
   private static final int MAX_RESULTS = 5;
   private static final int MAX_DESC_LENGTH = 150;
 
@@ -86,7 +85,19 @@ public class SlackSearchHandler {
             SlackBlockBuilder.truncate(
                 source.path("description").asText("No description available."), MAX_DESC_LENGTH);
 
-        String url = String.format("%s/%s/%s", OM_BASE_URL, entityType, fqn);
+        String baseUrl = "";
+        try {
+          Settings settings = Entity.getSystemRepository().getOMBaseUrlConfigInternal();
+          if (settings != null && settings.getConfigValue() != null) {
+            OpenMetadataBaseUrlConfiguration baseUrlConfig =
+                (OpenMetadataBaseUrlConfiguration) settings.getConfigValue();
+            baseUrl = baseUrlConfig.getOpenMetadataUrl();
+          }
+        } catch (Exception e) {
+          LOG.warn("Failed to get OpenMetadata Base URL for Slack result links", e);
+        }
+
+        String url = String.format("%s/%s/%s", baseUrl, entityType, fqn);
         String sectionText =
             String.format("*[%s]* *%s*\n%s",
                 entityType.toUpperCase(),
