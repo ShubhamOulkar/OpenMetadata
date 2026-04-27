@@ -49,26 +49,36 @@ public class SlackAppResource {
 
     LOG.info(
         "Slack command received: command={}, text={}, userId={}, channelId={}",
-        command, text, userId, channelId);
+        command,
+        text,
+        userId,
+        channelId);
 
     if (text != null && text.toLowerCase().startsWith("search")) {
       String query = text.substring("search".length()).trim();
       if (query.isEmpty()) {
-        String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(
-            new SlackTextResponse("Please provide a search term. Usage: `/metadata search <term>`"));
+        String json =
+            com.slack.api.util.json.GsonFactory.createSnakeCase()
+                .toJson(
+                    new SlackTextResponse(
+                        "Please provide a search term. Usage: `/metadata search <term>`"));
         return Response.ok(json).build();
       }
       List<LayoutBlock> blocks = searchHandler.search(query);
-      String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(new SlackBlockResponse(blocks));
+      String json =
+          com.slack.api.util.json.GsonFactory.createSnakeCase()
+              .toJson(new SlackBlockResponse(blocks));
       return Response.ok(json).build();
     }
 
     // Default help message
-    String json = com.slack.api.util.json.GsonFactory.createSnakeCase().toJson(
-        new SlackTextResponse(
-            String.format(
-                "Hello <@%s>! Here's what I can do:\n• `/metadata search <term>` — Search all assets by name\n• `/metadata search table <term>` — Search only tables\n• Supported types: `table`, `topic`, `dashboard`, `pipeline`, `mlmodel`, `glossary`",
-                userId)));
+    String json =
+        com.slack.api.util.json.GsonFactory.createSnakeCase()
+            .toJson(
+                new SlackTextResponse(
+                    String.format(
+                        "Hello <@%s>! Here's what I can do:\n• `/metadata search <term>` — Search all assets by name\n• `/metadata search table <term>` — Search only tables\n• Supported types: `table`, `topic`, `dashboard`, `pipeline`, `mlmodel`, `glossary`",
+                        userId)));
     return Response.ok(json).build();
   }
 
@@ -78,11 +88,13 @@ public class SlackAppResource {
   @Operation(
       operationId = "slackInteractive",
       summary = "Handle Slack interactivity",
-      description = "Silently acknowledges Slack interactive component actions (like button clicks).")
+      description =
+          "Silently acknowledges Slack interactive component actions (like button clicks).")
   public Response handleInteractive(@FormParam("payload") String payload) {
     // Slack sends a 'payload' JSON string when a user clicks a button.
     // Since our 'View' buttons use a URL to open the browser, we don't need to process the payload.
-    // We just need to return an empty 200 OK so Slack knows we received it and doesn't show an error.
+    // We just need to return an empty 200 OK so Slack knows we received it and doesn't show an
+    // error.
     LOG.info("Slack interactive payload received");
     return Response.ok().build();
   }
