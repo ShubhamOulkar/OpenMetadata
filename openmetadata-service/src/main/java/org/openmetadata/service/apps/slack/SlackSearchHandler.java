@@ -2,6 +2,7 @@ package org.openmetadata.service.apps.slack;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.slack.api.model.block.LayoutBlock;
+import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,6 @@ import org.openmetadata.schema.utils.JsonUtils;
 import org.openmetadata.service.Entity;
 import org.openmetadata.service.search.SearchRepository;
 import org.openmetadata.service.security.policyevaluator.SubjectContext;
-import jakarta.ws.rs.core.Response;
 
 /**
  * Handles the /metadata search slash command.
@@ -47,8 +47,17 @@ public class SlackSearchHandler {
       String[] parts = query.split("\\s+", 2);
       if (parts.length == 2) {
         String possibleType = parts[0].toLowerCase();
-        Set<String> validTypes = Set.of(
-            "table", "topic", "dashboard", "pipeline", "mlmodel", "container", "glossary", "user", "team");
+        Set<String> validTypes =
+            Set.of(
+                "table",
+                "topic",
+                "dashboard",
+                "pipeline",
+                "mlmodel",
+                "container",
+                "glossary",
+                "user",
+                "team");
         if (validTypes.contains(possibleType)) {
           indexName = possibleType;
           searchTerm = parts[1];
@@ -100,13 +109,10 @@ public class SlackSearchHandler {
 
         String url = String.format("%s/%s/%s", baseUrl, entityType, fqn);
         String sectionText =
-            String.format("*[%s]* *%s*\n%s",
-                entityType.toUpperCase(),
-                name,
-                description);
+            String.format("*[%s]* *%s*\n%s", entityType.toUpperCase(), name, description);
 
-        blocks.add(SlackBlockBuilder.sectionWithLinkButton(
-            sectionText, "View", url, "view_entity_" + i));
+        blocks.add(
+            SlackBlockBuilder.sectionWithLinkButton(sectionText, "View", url, "view_entity_" + i));
       }
 
     } catch (Exception e) {
