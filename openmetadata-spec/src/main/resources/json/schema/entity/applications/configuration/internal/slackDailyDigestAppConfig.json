@@ -1,0 +1,45 @@
+{
+  "$id": "https://open-metadata.org/schema/entity/applications/configuration/internal/slackDailyDigestApp.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SlackDailyDigestAppConfig",
+  "description": "This schema defines configuration for Slack Daily Digest Application.",
+  "definitions": {
+    "slackDailyDigestAppType": {
+      "description": "Application type.",
+      "type": "string",
+      "enum": ["SlackDailyDigest"],
+      "default": "SlackDailyDigest"
+    }
+  },
+  "properties": {
+    "type": {
+      "title": "Application Type",
+      "description": "Application Type",
+      "$ref": "#/definitions/slackDailyDigestAppType",
+      "default": "SlackDailyDigest"
+    },
+    "slackWebhookUrl": {
+      "title": "Slack Webhook URL",
+      "description": "Slack Webhook URL to send the daily digest to.",
+      "type": "string"
+    },
+    "includeNewEntities": {
+      "title": "Include New Entities",
+      "description": "Include a summary of all new Tables, Topics, and Dashboards created in the last 24 hours.",
+      "type": "boolean",
+      "default": true
+    },
+    "includeDataQualitySummary": {
+      "title": "Include Data Quality Summary",
+      "description": "Include a summary of Data Quality test results and any new incidents from the last 24 hours.",
+      "type": "boolean",
+      "default": true
+    },
+    "filter": {
+      "title": "Search Filter",
+      "description": "Elasticsearch/OpenSearch JSON filter to scope the digest. E.g., {\"serviceName\": \"production_db\"}. Leave blank to include all metadata changes.",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

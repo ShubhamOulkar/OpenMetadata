@@ -53,6 +53,7 @@ export interface IngestionExtraConfig {
 }
 
 export interface Combination {
+  minute: RegExp;
   hour: RegExp;
   day: RegExp;
   week: RegExp;

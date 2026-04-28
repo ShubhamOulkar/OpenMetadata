@@ -1,0 +1,32 @@
+{
+  "$id": "SlackDailyDigestApplication.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SlackDailyDigestAppConfig",
+  "description": "Slack Daily Digest Application Configuration",
+  "type": "object",
+  "properties": {
+    "slackWebhookUrl": {
+      "title": "Slack Webhook URL",
+      "description": "Slack Webhook URL to send the daily digest. If left blank, the app will try to find a webhook from existing alerts.",
+      "type": "string"
+    },
+    "includeNewEntities": {
+      "title": "Include New Entities",
+      "description": "Include a summary of all new Tables, Topics, and Dashboards created in the last 24 hours.",
+      "type": "boolean",
+      "default": true
+    },
+    "includeDataQualitySummary": {
+      "title": "Include Data Quality Summary",
+      "description": "Include a summary of Data Quality test results and any new incidents from the last 24 hours.",
+      "type": "boolean",
+      "default": true
+    },
+    "filter": {
+      "title": "Search Filter",
+      "description": "Elasticsearch/OpenSearch JSON filter to scope the digest. E.g., {\"serviceName\": \"production_db\"}. Leave blank to include all metadata changes.",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

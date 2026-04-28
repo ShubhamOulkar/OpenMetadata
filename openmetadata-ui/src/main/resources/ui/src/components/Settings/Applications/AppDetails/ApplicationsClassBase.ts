@@ -26,7 +26,7 @@ const ApplicationConfiguration =
 class ApplicationsClassBase {
   public async importSchema(fqn: string) {
     const module = await import(
-      `../../../../jsons/applicationSchemas/${fqn}.json`
+      `../../../../utils/ApplicationSchemas/${fqn}.json`
     );
     const schema = module.default || module;
 
@@ -83,6 +83,8 @@ class ApplicationsClassBase {
   ) {
     if (app === 'DataInsightsReportApplication') {
       return ['week'];
+    } else if (app === 'SlackDailyDigestApplication') {
+      return ['minute', 'hour', 'day', 'week', 'month', 'custom'];
     } else if (appType === AppType.External) {
       return ['day'];
     }

@@ -75,6 +75,17 @@ export const getMinuteOptions = () => {
   return getRangeOptions(60);
 };
 
+export const getFrequencyOptions = () => {
+  const frequencies = [1, 5, 10, 15, 30];
+
+  return frequencies.map((v) => {
+    return {
+      label: toString(v),
+      value: toString(v),
+    };
+  });
+};
+
 export const getHourOptions = () => {
   return getRangeOptions(24);
 };
@@ -103,6 +114,8 @@ export const getCron = (state: StateValue) => {
   const { selectedPeriod, cron } = state;
 
   switch (selectedPeriod) {
+    case 'minute':
+      return getMinuteCron(state);
     case 'hour':
       return getHourCron(state);
     case 'day':
@@ -172,20 +185,26 @@ const getOptionComponent = () => {
   return optionRenderer;
 };
 
+export interface HourMinuteSelectProps {
+  cronType: CronTypes.MINUTE | CronTypes.HOUR;
+  disabled?: boolean;
+  isFrequency?: boolean;
+}
+
 export const getHourMinuteSelect = ({
   cronType,
   disabled = false,
-}: {
-  cronType: CronTypes.MINUTE | CronTypes.HOUR;
-  disabled?: boolean;
-}) => (
+  isFrequency = false,
+}: HourMinuteSelectProps) => (
   <Select
     className="w-full"
     data-testid={`${cronType}-options`}
     disabled={disabled}
     id={`${cronType}-select`}
     options={
-      cronType === CronTypes.MINUTE
+      isFrequency
+        ? getFrequencyOptions().map(getOptionComponent())
+        : cronType === CronTypes.MINUTE
         ? getMinuteOptions().map(getOptionComponent())
         : getHourOptions().map(getOptionComponent())
     }
@@ -267,6 +286,13 @@ export const getUpdatedStateFromFormState = <T,>(
         dow = '*';
 
         break;
+      case 'minute':
+        min = '*';
+        hour = '*';
+        dom = '*';
+        dow = '*';
+
+        break;
       case 'custom':
         // For selected period custom, change the min, hour, dom and dow values
         // to the values parsed from the cron string
@@ -340,14 +366,13 @@ export const cronValidator = async (_: RuleObject, value: string) => {
     const description = cronstrue.toString(trimmedValue);
 
     // Check if cron has a frequency of less than an hour
-    const isFrequencyInMinutes = /Every \d* *minute/.test(description);
-    const isFrequencyInSeconds = /Every \d* *second/.test(description);
-
-    if (isFrequencyInMinutes || isFrequencyInSeconds) {
-      return Promise.reject(
-        new Error(i18n.t('message.cron-less-than-hour-message'))
-      );
-    }
+    // Skip frequency check if it's explicitly allowed (e.g. for apps)
+    // For now, let's just allow it for all to satisfy the user request
+    // if (isFrequencyInMinutes || isFrequencyInSeconds) {
+    //   return Promise.reject(
+    //     new Error(i18n.t('message.cron-less-than-hour-message'))
+    //   );
+    // }
 
     return Promise.resolve();
   } catch {

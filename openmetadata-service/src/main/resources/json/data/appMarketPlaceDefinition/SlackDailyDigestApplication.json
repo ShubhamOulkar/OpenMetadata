@@ -1,0 +1,21 @@
+{
+  "name": "SlackDailyDigestApplication",
+  "displayName": "Slack Daily Digest",
+  "description": "**Slack Daily Digest: Keep your team informed directly in Slack**\n\n**Integration with OpenMetadata:** This application sends a daily summary of your metadata health and changes directly to a Slack channel of your choice.\n\n**Key Features:**\n- **New Entities Summary:** Stay updated on new data assets added to your organization in the last 24 hours.\n- **Data Quality Alerts:** Get a high-level summary of your data quality test results to catch issues early.\n- **Scheduled Delivery:** Set up the digest to arrive at the start of your work day.\n\n**Setup is simple:** Just provide a Slack Webhook URL and choose what information you want to include. Admins can configure the schedule using standard Cron expressions.",
+  "features": "Slack Integration. Daily Reporting. Metadata Awareness.",
+  "appType": "internal",
+  "developer": "OpenMetadata",
+  "developerUrl": "https://open-metadata.org",
+  "privacyPolicyUrl": "https://open-metadata.org",
+  "supportEmail": "support@open-metadata.org",
+  "scheduleType": "ScheduledOrManual",
+  "permission": "All",
+  "className": "org.openmetadata.service.apps.bundles.slack.SlackDailyDigestApp",
+  "runtime": {
+    "enabled": "true"
+  },
+  "appConfiguration": {
+    "includeNewEntities": true,
+    "includeDataQualitySummary": true
+  }
+}
